@@ -8,6 +8,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -15,11 +16,12 @@ import javax.inject.Singleton
 object AppModule {
 
     @Provides
+    @Named("API_BASE_URL")
     fun providesBaseUrl() : String = "https://pokeapi.co/api/v2/"
 
     @Provides
     @Singleton
-    fun provideRetrofit(BASE_URL : String) : Retrofit = Retrofit.Builder()
+    fun provideRetrofit(@Named("API_BASE_URL") BASE_URL : String) : Retrofit = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
         .baseUrl(BASE_URL)
         .build()

@@ -1,12 +1,16 @@
 package com.example.pokeapi.presentation.recyclerview
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokeapi.R
+import com.squareup.picasso.Picasso
 
-class PokemonAdapter(private val dataSet: ArrayList<PokemonItem>): RecyclerView.Adapter<PokemonViewHolder>() {
+class PokemonAdapter(diffCallback: DiffUtil.ItemCallback<PokemonItem>) :
+    PagingDataAdapter<PokemonItem, PokemonViewHolder>(diffCallback) {
     private var onClickListener: OnClickListener? = null
 
     override fun onCreateViewHolder(
@@ -23,25 +27,18 @@ class PokemonAdapter(private val dataSet: ArrayList<PokemonItem>): RecyclerView.
         holder: PokemonViewHolder,
         position: Int
     ) {
-        holder.textView.text = dataSet[position].name
-        holder.view.setOnClickListener { onClickListener?.onClick(position, dataSet[position]) }
+        val item = getItem(position)
+        holder.textView.text = item?.name
+        Picasso.get().load(item?.image).error(R.mipmap.ic_launcher).resize(400, 400)
+            .into(holder.imageView)
+        holder.view.setOnClickListener { onClickListener?.onClick(position, item!!) }
     }
-
-    override fun getItemCount(): Int = dataSet.size
 
     interface OnClickListener {
         fun onClick(
             position: Int,
             item: PokemonItem,
         )
-    }
-
-    fun setData(newItems: List<PokemonItem>) {
-        val diffUtilCallback = DiffUtilCallback(dataSet, newItems)
-        val diffResult = DiffUtil.calculateDiff(diffUtilCallback)
-        dataSet.clear()
-        dataSet.addAll(newItems)
-        diffResult.dispatchUpdatesTo(this)
     }
 
     fun setOnClickListener(listener: OnClickListener?) {

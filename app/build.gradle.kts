@@ -48,8 +48,6 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    val paging_version = "3.3.6"
-    implementation("androidx.paging:paging-runtime:$paging_version")
     val retrofit_version = "2.11.0"
     implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
     implementation("com.squareup.retrofit2:converter-gson:$retrofit_version")
@@ -62,6 +60,14 @@ dependencies {
     implementation("com.google.android.material:material:$material_version")
     val fragment_version = "1.8.6"
     implementation("androidx.fragment:fragment-ktx:$fragment_version")
+    val picasso_version = "2.8"
+    implementation("com.squareup.picasso:picasso:$picasso_version")
+    val room_version = "2.7.1"
+    implementation("androidx.room:room-ktx:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-paging:$room_version")
+    val paging_version = "3.3.6"
+    implementation("androidx.paging:paging-runtime:$paging_version")
 }
 
 kapt {
