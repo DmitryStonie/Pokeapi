@@ -1,5 +1,6 @@
 package com.example.pokeapi.presentation.recyclerview
 
+import android.util.Log
 import androidx.recyclerview.widget.DiffUtil
 
 class DiffUtilCallback(private val oldItems: List<PokemonItem>, private val newItems: List<PokemonItem>): DiffUtil.Callback() {
@@ -11,14 +12,13 @@ class DiffUtilCallback(private val oldItems: List<PokemonItem>, private val newI
         oldItemPosition: Int,
         newItemPosition: Int
     ): Boolean {
-        return true
+        return oldItems[oldItemPosition].id == newItems[newItemPosition].id
     }
 
     override fun areContentsTheSame(
         oldItemPosition: Int,
         newItemPosition: Int
     ): Boolean {
-        return oldItems[oldItemPosition].name == newItems[newItemPosition].name &&
-                oldItems[oldItemPosition].image == newItems[newItemPosition].image
+        return oldItems[oldItemPosition] == newItems[newItemPosition]
     }
 }
