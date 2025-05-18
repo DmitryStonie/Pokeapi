@@ -13,6 +13,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(private val getPokemonListRemote: GetPokemonListRemote): ViewModel() {
     val pokemonState = MutableLiveData<List<Pokemon>>()
+    val selectedPokemon = MutableLiveData<Pokemon?>()
 
     fun getPokemonList(){
         viewModelScope.launch {
@@ -21,5 +22,12 @@ class MainViewModel @Inject constructor(private val getPokemonListRemote: GetPok
                 pokemonState.postValue(it)
             }
         }
+    }
+
+    fun selectPokemon(index: Int){
+        selectedPokemon.value = pokemonState.value?.get(index)
+    }
+    fun resetSelectedPokemon(){
+        selectedPokemon.value = null
     }
 }

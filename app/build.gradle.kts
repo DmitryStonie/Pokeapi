@@ -62,6 +62,8 @@ dependencies {
     implementation("com.google.android.material:material:$material_version")
     val fragment_version = "1.8.6"
     implementation("androidx.fragment:fragment-ktx:$fragment_version")
+    val picasso_version = "2.8"
+    implementation("com.squareup.picasso:picasso:$picasso_version")
 }
 
 kapt {

@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.CheckBox
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.GridLayoutManager
@@ -22,7 +23,7 @@ import com.google.android.material.appbar.MaterialToolbar
 @AndroidEntryPoint
 class MainScreenFragment : Fragment(R.layout.fragment_recyclerview_screen) {
 
-    val viewModel: MainViewModel by viewModels<MainViewModel>()
+    val viewModel: MainViewModel by activityViewModels<MainViewModel>()
     val recyclerAdapter: PokemonAdapter = PokemonAdapter(arrayListOf())
 
     lateinit var recyclerView: RecyclerView
@@ -45,18 +46,13 @@ class MainScreenFragment : Fragment(R.layout.fragment_recyclerview_screen) {
                 position: Int,
                 item: PokemonItem
             ) {
-                val fragment = PokemonFragment()
-                fragment.arguments =
-                    bundleOf(
-                        "name" to item.name,
-                        "id" to item.id,
-                    )
+                viewModel.selectPokemon(position)
                 parentFragmentManager.beginTransaction()
                     .setCustomAnimations(
                         android.R.animator.fade_in,
                         android.R.animator.fade_out,
                     )
-                    .add(R.id.fragment_container_view, fragment).addToBackStack(
+                    .add(R.id.fragment_container_view, PokemonFragment()).addToBackStack(
                         PokemonFragment.POKEMON_FRAGMENT
                     )
                     .commit()
@@ -68,7 +64,8 @@ class MainScreenFragment : Fragment(R.layout.fragment_recyclerview_screen) {
 
 
         topAppBar.setNavigationOnClickListener {
-            Log.d("INFO", "pressed")
+            viewModel.resetSelectedPokemon()
+            viewModel.getPokemonList()
         }
         attackCheckBox.setOnCheckedChangeListener { buttonView, isChecked ->
             Log.d("INFO", "$isChecked")
