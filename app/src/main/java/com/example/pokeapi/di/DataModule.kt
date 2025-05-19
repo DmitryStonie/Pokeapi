@@ -9,6 +9,9 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
+/**
+ * Module for providing project repositories.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class DataModule {

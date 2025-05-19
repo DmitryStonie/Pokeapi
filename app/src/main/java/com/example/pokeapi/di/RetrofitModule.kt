@@ -11,6 +11,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
+/**
+ * Module for providing Retrofit dependencies for PokeApi.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 class RetrofitModule {

@@ -10,7 +10,9 @@ import com.example.pokeapi.R
 import com.example.pokeapi.presentation.MainViewModel
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
-
+/**
+ * Fragment with pokemon image and stats.
+ */
 class PokemonFragment : Fragment(R.layout.fragment_pokemon_info) {
 
     val viewModel: MainViewModel by activityViewModels<MainViewModel>()

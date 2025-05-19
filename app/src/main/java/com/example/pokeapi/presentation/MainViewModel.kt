@@ -20,6 +20,12 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import kotlin.math.max
 
+/**
+ * ViewModel for loading pokemon to recycler via PagingLibrary and via Room database. Also, it loads pokemon to PokemonFragment.
+ * @param getPokemonPages Use case to get PagingData of pokemon.
+ * @param getLocalPokemon Use case to get pokemon from local database.
+ * @param getAllLocalPokemon Use case to get List of pokemon from local database.
+ */
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val getPokemonPages: GetPokemonPages,
@@ -31,6 +37,9 @@ class MainViewModel @Inject constructor(
     @OptIn(ExperimentalPagingApi::class)
     lateinit var flow: Flow<PagingData<PokemonItem>>
 
+    /**
+     * Creates new PagingLibrary flow with pokemon data.
+     */
     @OptIn(ExperimentalPagingApi::class)
     fun initPagerFlow(initIndex: Int? = null) {
         viewModelScope.launch {
@@ -44,20 +53,30 @@ class MainViewModel @Inject constructor(
         }
     }
 
-
+    /**
+     * Loads by id selected pokemon.
+     */
     fun selectPokemon(id: Int) {
         viewModelScope.launch {
             val pokemon = getLocalPokemon.invoke(id)
             selectedPokemon.postValue(pokemon)
         }
     }
-
+    /**
+     * Resets selected pokemon.
+     */
     fun resetSelectedPokemon() {
         selectedPokemon.value = null
     }
 
+    /**
+     * Gets all pokemon from local database and sorts it by attack, defense, hp. Attack has highest priority, hp - lowest. I.e. if selected byAttack and byDefense, pokemon with attack = 100 defence = 10 is higher than pokemon with attack = 90 defence = 200.
+     * @param byAttack is sorting by attack.
+     * @param byDefense is sorting defense.
+     * @param byHp is sorting by hp.
+     */
     fun sortPokemon(
-        byAttack: Boolean, byHp: Boolean, byDefense: Boolean
+        byAttack: Boolean, byDefense: Boolean, byHp: Boolean
     ): MutableLiveData<List<PokemonItem>> {
         val result = MutableLiveData<List<PokemonItem>>()
         val selectors = ArrayList<Function1<Pokemon, Comparable<*>?>>()

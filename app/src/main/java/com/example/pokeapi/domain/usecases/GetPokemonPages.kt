@@ -7,7 +7,9 @@ import com.example.pokeapi.domain.repositories.PokeApiCachedRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-
+/**
+ * Use case for load pages of pokemon via Paging library.
+ */
 class GetPokemonPages @Inject constructor(
     private val pokeApiCachedRepository: PokeApiCachedRepository
 ) {

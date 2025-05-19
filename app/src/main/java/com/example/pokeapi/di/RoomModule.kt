@@ -12,6 +12,9 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 import javax.inject.Qualifier
 
+/**
+ * Module for providing Room database dependencies.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 class RoomModule {

@@ -21,6 +21,9 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlin.random.Random
 
+/**
+ * Fragment containing recyclerView with pokemon. Also, it has 3 checkbox for sorting and TopAppBar with refresh button to load cached data.
+ */
 @AndroidEntryPoint
 class MainScreenFragment : Fragment(R.layout.fragment_recyclerview_screen) {
 
@@ -74,6 +77,9 @@ class MainScreenFragment : Fragment(R.layout.fragment_recyclerview_screen) {
         }
     }
 
+    /**
+     * Starts to get data from viewModel flow.
+     */
     private fun observeViewModelFlow() {
         currentFlowJob = lifecycleScope.launch {
             viewModel.flow.collectLatest { pagingData ->
@@ -81,7 +87,9 @@ class MainScreenFragment : Fragment(R.layout.fragment_recyclerview_screen) {
             }
         }
     }
-
+    /**
+     * Handles sort checkbox click. If no checkbox selected, fragment forces viewModel to create flow with PagingLibrary pokemon data. Else, viewModel emit list of sorted values.
+     */
     private fun sortClicked() {
         currentFlowJob.cancel()
         if (!attackCheckBox.isChecked && !hpCheckBox.isChecked && !defenseCheckBox.isChecked) {
@@ -90,7 +98,7 @@ class MainScreenFragment : Fragment(R.layout.fragment_recyclerview_screen) {
             observeViewModelFlow()
         } else {
             viewModel.sortPokemon(
-                attackCheckBox.isChecked, hpCheckBox.isChecked, defenseCheckBox.isChecked
+                attackCheckBox.isChecked, defenseCheckBox.isChecked, hpCheckBox.isChecked,
             ).observe(viewLifecycleOwner) { pokemon ->
                 currentFlowJob = lifecycleScope.launch {
                     recyclerAdapter.submitData(PagingData.from(pokemon))
@@ -100,6 +108,9 @@ class MainScreenFragment : Fragment(R.layout.fragment_recyclerview_screen) {
         }
     }
 
+    /**
+     * Reset checkboxes state.
+     */
     private fun resetCheckboxes() {
         attackCheckBox.isChecked = false
         defenseCheckBox.isChecked = false

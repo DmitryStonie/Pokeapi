@@ -3,7 +3,10 @@ package com.example.pokeapi.data.datasources.pokeapilocal
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-
+/**
+ * Class representing pokemon in database
+ * @property position position of pokemon on remote PokeApi server.
+ */
 @Entity(tableName = "pokemon")
 data class PokemonEntity(
     @PrimaryKey val id: Int,

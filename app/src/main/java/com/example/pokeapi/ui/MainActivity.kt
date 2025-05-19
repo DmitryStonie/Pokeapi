@@ -12,6 +12,9 @@ import androidx.fragment.app.commit
 import com.example.pokeapi.R
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * Main Activity of app.
+ */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 

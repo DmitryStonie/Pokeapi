@@ -7,6 +7,9 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
+/**
+ * Retrofit interface for accessing pokemon api.
+ */
 interface PokeApiService {
 
     @GET("pokemon")
