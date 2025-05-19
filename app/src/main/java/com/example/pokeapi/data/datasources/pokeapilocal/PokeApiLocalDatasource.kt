@@ -18,4 +18,8 @@ class PokeApiLocalDatasource @Inject constructor(private val dao: PokemonDao) {
     suspend fun clearAll(){
         dao.clearAll()
     }
+
+    suspend fun getPokemon(id: Int): PokemonEntity?{
+        return dao.getPokemon(id)
+    }
 }

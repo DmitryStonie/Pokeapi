@@ -13,5 +13,5 @@ data class Pokemon(
     val specialAttack: Int,
     val specialDefense: Int,
     val speed: Int,
-    val sprite: String
+    val sprite: String?
 )

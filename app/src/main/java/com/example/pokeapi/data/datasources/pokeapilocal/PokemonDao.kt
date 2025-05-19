@@ -12,8 +12,24 @@ interface PokemonDao {
     suspend fun insertAll(users: List<PokemonEntity>)
 
     @Query("SELECT * FROM pokemon")
+    fun getAll(): List<PokemonEntity>
+
+    @Query("SELECT * FROM pokemon")
     fun pagingSource(): PagingSource<Int, PokemonEntity>
 
     @Query("DELETE FROM pokemon")
     suspend fun clearAll()
+
+    @Query("SELECT * FROM pokemon WHERE id = :id")
+    suspend fun getPokemon(id: Int): PokemonEntity?
+
+    @Query("SELECT COUNT(*) FROM pokemon")
+    suspend fun getNumberOfPokemon(): Int
+
+    @Query("SELECT min(`order`) FROM pokemon")
+    suspend fun getMinimalPokemonOrder(): Int?
+
+
+    @Query("SELECT max(`order`) FROM pokemon")
+    suspend fun getMaximalPokemonOrder(): Int?
 }

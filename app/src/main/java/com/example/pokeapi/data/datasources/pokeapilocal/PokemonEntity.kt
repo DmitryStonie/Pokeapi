@@ -8,6 +8,7 @@ import androidx.room.PrimaryKey
 data class PokemonEntity(
     @PrimaryKey
     val id: Int,
+    val order: Int,
     val name: String,
     val height: Int,
     val weight: Int,
@@ -20,5 +21,5 @@ data class PokemonEntity(
     val specialAttack: Int,
     val specialDefense: Int,
     val speed: Int,
-    val sprite: String
+    val sprite: String?
 )

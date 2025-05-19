@@ -1,6 +1,7 @@
 package com.example.pokeapi.data.datasources.pokeapiremote
 
 import android.util.Log
+import com.example.pokeapi.data.datasources.pokeapiremote.data.PokemonDto
 import com.example.pokeapi.data.datasources.pokeapiremote.data.PokemonInfo
 import com.example.pokeapi.data.datasources.pokeapiremote.data.PokemonList
 import kotlinx.coroutines.Dispatchers
@@ -23,26 +24,25 @@ class PokeApiDatasource @Inject constructor(val pokeApiService: PokeApiService) 
     suspend fun getPokemonInfoList(
         limit: Int,
         offset: Int
-    ): List<PokemonInfo>? {
+    ): List<PokemonDto>? {
         val pokemonListResponse = getPokemonList(limit, offset)
         if (pokemonListResponse.isSuccessful) {
             val names = pokemonListResponse.body()?.results?.map { it.name }
             if (names != null) {
                 val mutex = Mutex()
-                val pokemon = ArrayList<PokemonInfo>()
+                val pokemon = ArrayList<PokemonDto>()
                 runBlocking(Dispatchers.IO) {
-                    for (name in names) {
+                    for (i in names.indices) {
                         launch {
-                            val pokemonInfo = getPokemon(name)
+                            val pokemonInfo = getPokemon(names[i])
                             mutex.withLock {
-                                pokemonInfo?.let {
-                                    pokemon.add(it)
+                                pokemonInfo?.let { pokemonInfo ->
+                                    pokemon.add(PokemonDto(pokemonInfo, i + 1 + offset))
                                 }
                             }
                         }
                     }
                 }
-                Log.d("INFO", "in datasource got ${pokemon.size}")
                 return pokemon
             } else {
                 return null
