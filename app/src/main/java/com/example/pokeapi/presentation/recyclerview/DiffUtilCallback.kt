@@ -12,6 +12,7 @@ class DiffUtilCallback(private val oldItems: List<PokemonItem>, private val newI
         oldItemPosition: Int,
         newItemPosition: Int
     ): Boolean {
+        Log.d("INFO", "areItemsTheSame ${oldItems[oldItemPosition].id}   ${newItems[newItemPosition].id}")
         return oldItems[oldItemPosition].id == newItems[newItemPosition].id
     }
 
@@ -19,6 +20,7 @@ class DiffUtilCallback(private val oldItems: List<PokemonItem>, private val newI
         oldItemPosition: Int,
         newItemPosition: Int
     ): Boolean {
+        Log.d("INFO", "areContentsTheSame ${oldItems[oldItemPosition]}   ${newItems[newItemPosition]}")
         return oldItems[oldItemPosition] == newItems[newItemPosition]
     }
 }

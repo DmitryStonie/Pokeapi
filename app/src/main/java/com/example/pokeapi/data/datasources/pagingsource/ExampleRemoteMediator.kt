@@ -20,14 +20,17 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import retrofit2.HttpException
 import java.io.IOException
+import kotlin.math.max
+import kotlin.random.Random
 
 
 @OptIn(ExperimentalPagingApi::class)
 class ExampleRemoteMediator @Inject constructor(
     private val database: PokemonDatabase,
-    private val networkService: PokeApiDatasource
+    private val networkService: PokeApiDatasource,
+    val startIndex: Int? = null
 ) : RemoteMediator<Int, PokemonEntity>() {
-    val pokemonDao = database.pokemonDao()
+    private val pokemonDao = database.pokemonDao()
 
     override suspend fun load(
         loadType: LoadType,
@@ -38,36 +41,51 @@ class ExampleRemoteMediator @Inject constructor(
                 val loadKey = when (loadType) {
                     LoadType.REFRESH -> {
                         Log.d("INFO", "REFRESH")
-                        0
+                        startIndex ?: (pokemonDao.getMinimalPokemonOrder()?.minus(1) ?: 0)
                     }
 
                     LoadType.PREPEND -> {
                         Log.d("INFO", "PREPEND")
-                        return@withContext MediatorResult.Success(endOfPaginationReached = true)
+                        var order = 1
+                        database.withTransaction {
+                            order = pokemonDao.getMinimalPokemonOrder() ?: 1
+                        }
+                        if (order == 1) {
+                            Log.d("INFO", "PREPEND end")
+                            return@withContext MediatorResult.Success(endOfPaginationReached = true)
+                        } else {
+                            max(order - 1 - state.config.pageSize, 0)
+                        }
                     }
 
                     LoadType.APPEND -> {
                         Log.d("INFO", "APPEND")
-                        val lastItem = state.lastItemOrNull()
+                        var lastItem = state.lastItemOrNull()
                         if (lastItem == null) {
-                            Log.d("INFO", "last item is null")
-                            return@withContext MediatorResult.Success(endOfPaginationReached = false)
+                            val lastInd = pokemonDao.getMaximalPokemonOrder() ?: 0
+                            if (lastInd < 1302) {
+                                lastInd
+                            } else{
+                                return@withContext MediatorResult.Success(endOfPaginationReached = true)
+                            }
                         } else {
-                            lastItem.id
+                            lastItem.order
                         }
                     }
                 }
+                Log.d("INFO", "Load with els ${state.config.pageSize} and ${loadKey}")
                 val response = networkService.getPokemonInfoList(state.config.pageSize, loadKey)
+                Log.d("INFO", "end loading")
                 database.withTransaction {
                     if (loadType == LoadType.REFRESH) {
                         pokemonDao.clearAll()
                     }
                     if (response != null) {
-                        Log.d("INFO", "${response.size}")
-                        pokemonDao.insertAll(response.map { pokemonInfo -> pokemonInfo.toPokemonEntity() })
+                        pokemonDao.insertAll(response.map { pokemonDto -> pokemonDto.toPokemonEntity() })
+                        Log.d("INFO", "elements added")
                     }
                 }
-                Log.d("INFO", "Is end ${response?.isEmpty() ?: true}")
+                Log.d("INFO", "End result is ${response?.isEmpty() ?: true}")
                 MediatorResult.Success(
                     endOfPaginationReached = response?.isEmpty() ?: true
                 )

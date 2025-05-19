@@ -1,18 +1,19 @@
 package com.example.pokeapi.data.datasources.mappers
 
 import com.example.pokeapi.data.datasources.pokeapilocal.PokemonEntity
+import com.example.pokeapi.data.datasources.pokeapiremote.data.PokemonDto
 import com.example.pokeapi.data.datasources.pokeapiremote.data.PokemonInfo
 import com.example.pokeapi.data.datasources.pokeapiremote.data.PokemonStat
 import com.example.pokeapi.domain.entities.Pokemon
 
-fun PokemonInfo.toPokemonEntity(): PokemonEntity{
+fun PokemonDto.toPokemonEntity(): PokemonEntity{
     var hp = 0
     var attack = 0
     var defense = 0
     var specialAttack = 0
     var specialDefense = 0
     var speed = 0
-    for (stat in this.stats) {
+    for (stat in this.pokemonInfo.stats) {
         when (stat.stat.name) {
             "hp" -> hp = stat.baseStat
             "attack" -> attack = stat.baseStat
@@ -24,20 +25,21 @@ fun PokemonInfo.toPokemonEntity(): PokemonEntity{
         }
     }
     return PokemonEntity(
-        this.id,
-        this.name,
-        this.height,
-        this.weight,
-        this.types.getOrNull(0)?.type?.name ?: "",
-        this.types.getOrNull(1)?.type?.name ?: "",
-        this.types.getOrNull(2)?.type?.name ?: "",
+        this.pokemonInfo.id,
+        this.order,
+        this.pokemonInfo.name,
+        this.pokemonInfo.height,
+        this.pokemonInfo.weight,
+        this.pokemonInfo.types.getOrNull(0)?.type?.name ?: "",
+        this.pokemonInfo.types.getOrNull(1)?.type?.name,
+        this.pokemonInfo.types.getOrNull(2)?.type?.name,
         hp,
         attack,
         defense,
         specialAttack,
         specialDefense,
         speed,
-        this.sprites.frontDefault
+        this.pokemonInfo.sprites.frontDefault
     )
 }
 

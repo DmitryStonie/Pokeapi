@@ -15,7 +15,7 @@ class PokeApiRemoteRepositoryImpl @Inject constructor(private val pokeApiDatasou
         limit: Int, offset: Int
     ): List<Pokemon>? {
         val pokemonInfo = pokeApiDatasource.getPokemonInfoList(limit, offset)
-        return pokemonInfo?.map{ pokemonInfo -> pokemonInfo.toPokemon()}
+        return pokemonInfo?.map{ pokemonDto -> pokemonDto.pokemonInfo.toPokemon()}
     }
 
 }

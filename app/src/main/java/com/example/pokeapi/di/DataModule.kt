@@ -1,13 +1,8 @@
 package com.example.pokeapi.di
 
-import android.content.Context
-import androidx.room.Database
-import androidx.room.Room
-import com.example.pokeapi.data.datasources.pokeapilocal.PokemonDao
-import com.example.pokeapi.data.datasources.pokeapilocal.PokemonDatabase
-import com.example.pokeapi.data.datasources.pokeapiremote.PokeApiDatasource
-import com.example.pokeapi.data.datasources.pokeapiremote.PokeApiService
+import com.example.pokeapi.data.repositories.PokeApiLocalRepositoryImpl
 import com.example.pokeapi.data.repositories.PokeApiRemoteRepositoryImpl
+import com.example.pokeapi.domain.repositories.PokeApiLocalRepository
 import com.example.pokeapi.domain.repositories.PokeApiRemoteRepository
 import dagger.Binds
 import dagger.Module
@@ -22,5 +17,8 @@ import javax.inject.Singleton
 abstract class DataModule {
     @Binds
     abstract fun providePokeApiRemoteRepository(pokeApiRemoteRepositoryImpl: PokeApiRemoteRepositoryImpl): PokeApiRemoteRepository
+
+    @Binds
+    abstract fun providePokeApiLocalRepository(pokeApiLocalRepositoryImpl: PokeApiLocalRepositoryImpl): PokeApiLocalRepository
 
 }
