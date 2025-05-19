@@ -1,3 +1,18 @@
 <resources>
-    <string name="app_name">Pokeapi</string>
+    <string name="app_name">Poke Api</string>
+    <string name="stat_string">%1$d/%2$d</string>
+    <string name="hp_title">HP:</string>
+    <string name="pokemon_image_content_description">Pokemon image</string>
+    <string name="height_title">Height:</string>
+    <string name="weight_title">Weight:</string>
+    <string name="types_title">Types:</string>
+    <string name="attack_title">Attack:</string>
+    <string name="defense_title">Defense:</string>
+    <string name="speed_title">Speed:</string>
+    <string name="attack_checkbox_title">Attack</string>
+    <string name="defense_checkbox_title">Defense</string>
+    <string name="hp_checkbox_title">HP</string>
+    <string name="max_attack_icon_content_description">Max attack</string>
+    <string name="max_hp_icon_content_description">Max hp</string>
+    <string name="max_defense_icon_content_description">Max defense</string>
 </resources>

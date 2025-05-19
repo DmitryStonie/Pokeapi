@@ -12,7 +12,7 @@ interface PokemonDao {
     suspend fun insertAll(users: List<PokemonEntity>)
 
     @Query("SELECT * FROM pokemon")
-    fun getAll(): List<PokemonEntity>
+    suspend fun getAll(): List<PokemonEntity>?
 
     @Query("SELECT * FROM pokemon")
     fun pagingSource(): PagingSource<Int, PokemonEntity>
@@ -26,10 +26,9 @@ interface PokemonDao {
     @Query("SELECT COUNT(*) FROM pokemon")
     suspend fun getNumberOfPokemon(): Int
 
-    @Query("SELECT min(`order`) FROM pokemon")
-    suspend fun getMinimalPokemonOrder(): Int?
+    @Query("SELECT min(position) FROM pokemon")
+    suspend fun getMinimalPokemonPosition(): Int?
 
-
-    @Query("SELECT max(`order`) FROM pokemon")
-    suspend fun getMaximalPokemonOrder(): Int?
+    @Query("SELECT max(position) FROM pokemon")
+    suspend fun getMaximalPokemonPosition(): Int?
 }

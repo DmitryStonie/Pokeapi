@@ -8,30 +8,34 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Named
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
+class RetrofitModule {
 
     @Provides
-    @Named("API_BASE_URL")
-    fun providesBaseUrl() : String = "https://pokeapi.co/api/v2/"
-
-    @Provides
-    @Singleton
-    fun provideRetrofit(@Named("API_BASE_URL") BASE_URL : String) : Retrofit = Retrofit.Builder()
-        .addConverterFactory(GsonConverterFactory.create())
-        .baseUrl(BASE_URL)
-        .build()
+    @PokemonApiUrl
+    fun providesBaseUrl(): String = "https://pokeapi.co/api/v2/"
 
     @Provides
     @Singleton
-    fun providePokeApiService(retrofit : Retrofit) : PokeApiService = retrofit.create(PokeApiService::class.java)
+    fun provideRetrofit(@PokemonApiUrl baseUrl: String): Retrofit =
+        Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl(baseUrl)
+            .build()
 
     @Provides
     @Singleton
-    fun providePokeApiDatasource(pokeApiService : PokeApiService) : PokeApiDatasource =
+    fun providePokeApiService(retrofit: Retrofit): PokeApiService =
+        retrofit.create(PokeApiService::class.java)
+
+    @Provides
+    @Singleton
+    fun providePokeApiDatasource(pokeApiService: PokeApiService): PokeApiDatasource =
         PokeApiDatasource(pokeApiService)
 }
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class PokemonApiUrl
