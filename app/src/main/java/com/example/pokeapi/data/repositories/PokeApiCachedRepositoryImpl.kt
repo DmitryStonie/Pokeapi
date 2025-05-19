@@ -15,10 +15,16 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
+/**
+ * Class of pokemon cached (remote + local) repository.
+ */
 class PokeApiCachedRepositoryImpl @Inject constructor(
     private val database: PokemonDatabase,
     private val pokeApiDatasource: PokeApiDatasource,
 ): PokeApiCachedRepository {
+    /**
+     * Function creates flow of PagingData with pokemon. Initial index is index from which pokemon will load.
+     */
     @OptIn(ExperimentalPagingApi::class)
     override suspend fun getPokemonPages(initialIndex: Int?): Flow<PagingData<Pokemon>> {
         val pokemonDao = database.pokemonDao()

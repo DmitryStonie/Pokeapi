@@ -9,6 +9,10 @@ import com.example.pokeapi.R
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 
+/**
+ * ViewHolder for pokemon in RecyclerView.
+ * @param view it's view
+ */
 class PokemonViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
     val imageView: ImageView = view.findViewById(R.id.image)
     val textView: TextView = view.findViewById(R.id.name)
@@ -18,12 +22,12 @@ class PokemonViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
     fun bind(item: PokemonItem){
         textView.text = item.name
-        if (item.image != null) {
-            Picasso.get().load(item.image).resize(400, 400).memoryPolicy(MemoryPolicy.NO_CACHE)
+        if (item.imageUrl != null) {
+            Picasso.get().load(item.imageUrl).resize(400, 400).memoryPolicy(MemoryPolicy.NO_CACHE)
                 .into(imageView)
         }
         attackIconView.isVisible = item.isMaxAttack == true
-        defenceIconView.isVisible = item.isMaxDefence == true
+        defenceIconView.isVisible = item.isMaxDefense == true
         hpIconView.isVisible = item.isMaxHp == true
     }
 }

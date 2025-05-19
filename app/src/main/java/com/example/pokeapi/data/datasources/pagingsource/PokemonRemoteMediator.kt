@@ -16,7 +16,12 @@ import retrofit2.HttpException
 import java.io.IOException
 import kotlin.math.max
 
-
+/**
+ * PagingLibrary Remote mediator for loading pokemon by pages from remote server and local cache. Firstly, it tries to get remote page of pokemon. If it's successful, Mediator clears local database and starts to load new pokemon. If remote server is unreachable, it loads pokemon from local database.
+ * @param database local database instance.
+ * @param networkService remote pokemon service instance.
+ * @param startIndex position on server of first element to load. If local cache is empty, it's zero. Else if local cache isn't empty it's minimal position of all elements in cache. Also, user can set up it manually to start loading from server from user defined element.
+ */
 @OptIn(ExperimentalPagingApi::class)
 class PokemonRemoteMediator @Inject constructor(
     private val database: PokemonDatabase,

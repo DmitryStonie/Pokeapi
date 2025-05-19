@@ -1,6 +1,8 @@
 package com.example.pokeapi.domain.entities
 
-
+/**
+ * Class, representing pokemon.
+ */
 data class Pokemon(
     val id: Int,
     val name: String,

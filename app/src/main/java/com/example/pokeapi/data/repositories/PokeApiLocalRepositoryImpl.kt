@@ -6,6 +6,9 @@ import com.example.pokeapi.domain.entities.Pokemon
 import com.example.pokeapi.domain.repositories.PokeApiLocalRepository
 import javax.inject.Inject
 
+/**
+ * Class of pokemon local repository.
+ */
 class PokeApiLocalRepositoryImpl @Inject constructor(private val pokeApiLocalDatasource: PokeApiLocalDatasource) :
     PokeApiLocalRepository {
     override suspend fun getPokemon(id: Int): Pokemon? {

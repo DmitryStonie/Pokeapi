@@ -6,6 +6,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
+/**
+ * Use case for load cached pokemon from local database.
+ */
 class GetLocalPokemon @Inject constructor(val repository: PokeApiLocalRepository) {
     suspend fun invoke(id: Int): Pokemon? {
         return withContext(Dispatchers.IO) {

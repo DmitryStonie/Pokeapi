@@ -6,6 +6,9 @@ import androidx.room.Query
 import androidx.room.OnConflictStrategy
 import androidx.paging.PagingSource
 
+/**
+ * Dao for accessing pokemon from database.
+ */
 @Dao
 interface PokemonDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)

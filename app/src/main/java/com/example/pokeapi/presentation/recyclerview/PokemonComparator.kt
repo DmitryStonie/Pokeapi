@@ -2,6 +2,9 @@ package com.example.pokeapi.presentation.recyclerview
 
 import androidx.recyclerview.widget.DiffUtil
 
+/**
+ * Comparator for PokemonAdapter.
+ */
 object PokemonComparator : DiffUtil.ItemCallback<PokemonItem>() {
     override fun areItemsTheSame(oldItem: PokemonItem, newItem: PokemonItem): Boolean {
         return oldItem.id == newItem.id
