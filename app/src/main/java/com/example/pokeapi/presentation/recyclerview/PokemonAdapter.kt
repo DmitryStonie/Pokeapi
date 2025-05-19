@@ -28,8 +28,7 @@ class PokemonAdapter(diffCallback: DiffUtil.ItemCallback<PokemonItem>) :
         }
     }
 
-
-    interface OnClickListener {
+    fun interface OnClickListener {
         fun onClick(
             position: Int,
             item: PokemonItem,

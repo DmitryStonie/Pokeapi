@@ -15,7 +15,6 @@ import kotlin.getValue
 import com.example.pokeapi.R
 import com.example.pokeapi.presentation.recyclerview.PokemonAdapter
 import com.example.pokeapi.presentation.recyclerview.PokemonComparator
-import com.example.pokeapi.presentation.recyclerview.PokemonItem
 import com.google.android.material.appbar.MaterialToolbar
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
@@ -45,19 +44,14 @@ class MainScreenFragment : Fragment(R.layout.fragment_recyclerview_screen) {
         hpCheckBox = view.findViewById<CheckBox>(R.id.hpCheckbox)
 
         recyclerView.layoutManager = GridLayoutManager(context, NUM_OF_COLUMNS)
-        recyclerAdapter.setOnClickListener(object : PokemonAdapter.OnClickListener {
-            override fun onClick(
-                position: Int, item: PokemonItem
-            ) {
-                viewModel.selectPokemon(item.id)
-                parentFragmentManager.beginTransaction().setCustomAnimations(
-                    android.R.animator.fade_in,
-                    android.R.animator.fade_out,
-                ).add(R.id.fragment_container_view, PokemonFragment()).addToBackStack(
-                    PokemonFragment.POKEMON_FRAGMENT
-                ).commit()
-            }
-
+        recyclerAdapter.setOnClickListener({ position, item ->
+            viewModel.selectPokemon(item.id)
+            parentFragmentManager.beginTransaction().setCustomAnimations(
+                android.R.animator.fade_in,
+                android.R.animator.fade_out,
+            ).add(R.id.fragment_container_view, PokemonFragment()).addToBackStack(
+                PokemonFragment.POKEMON_FRAGMENT
+            ).commit()
         })
         recyclerView.adapter = recyclerAdapter
         viewModel.initPagerFlow()

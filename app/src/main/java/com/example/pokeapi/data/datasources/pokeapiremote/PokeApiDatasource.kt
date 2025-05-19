@@ -5,9 +5,9 @@ import com.example.pokeapi.data.datasources.pokeapiremote.data.PokemonInfo
 import com.example.pokeapi.data.datasources.pokeapiremote.data.PokemonList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -27,7 +27,7 @@ class PokeApiDatasource @Inject constructor(val pokeApiService: PokeApiService) 
             if (names != null) {
                 val mutex = Mutex()
                 val pokemon = ArrayList<PokemonDto>()
-                runBlocking(Dispatchers.IO) {
+                withContext(Dispatchers.IO) {
                     for (i in names.indices) {
                         launch {
                             val pokemonInfo = getPokemon(names[i])
@@ -58,7 +58,7 @@ class PokeApiDatasource @Inject constructor(val pokeApiService: PokeApiService) 
         return null
     }
 
-    companion object{
+    companion object {
         const val NUM_OF_ATTEMPTS = 3
     }
 

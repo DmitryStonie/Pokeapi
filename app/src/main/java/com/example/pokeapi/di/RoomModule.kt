@@ -10,29 +10,30 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
-import javax.inject.Named
+import javax.inject.Qualifier
 
 @Module
 @InstallIn(SingletonComponent::class)
 class RoomModule {
     @Provides
-    @Named("DATABASE_NAME")
+    @DatabaseName
     fun provideDatabaseName(): String = "database"
 
     @Provides
     @Singleton
     fun provideDatabase(
-        @Named("DATABASE_NAME") databaseName: String,
-        @ApplicationContext context: Context
-    ): PokemonDatabase =
-        Room.databaseBuilder(
-            context,
-            PokemonDatabase::class.java,
-            databaseName,
-        ).build()
+        @DatabaseName databaseName: String, @ApplicationContext context: Context
+    ): PokemonDatabase = Room.databaseBuilder(
+        context,
+        PokemonDatabase::class.java,
+        databaseName,
+    ).build()
 
     @Provides
     fun providePokemonDao(database: PokemonDatabase): PokemonDao = database.pokemonDao()
 
-
 }
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class DatabaseName

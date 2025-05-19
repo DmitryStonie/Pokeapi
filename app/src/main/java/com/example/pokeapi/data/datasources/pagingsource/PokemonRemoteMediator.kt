@@ -29,7 +29,7 @@ class PokemonRemoteMediator @Inject constructor(
         loadType: LoadType, state: PagingState<Int, PokemonEntity>
     ): MediatorResult {
         return withContext(Dispatchers.IO) {
-            return@withContext try {
+            try {
                 val loadKey = when (loadType) {
                     LoadType.REFRESH -> {
                         startIndex ?: (pokemonDao.getMinimalPokemonPosition()?.minus(1) ?: 0)
