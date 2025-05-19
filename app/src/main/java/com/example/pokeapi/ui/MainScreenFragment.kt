@@ -1,14 +1,12 @@
 package com.example.pokeapi.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.CheckBox
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.PagingData
-import androidx.paging.map
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokeapi.presentation.MainViewModel
@@ -46,50 +44,43 @@ class MainScreenFragment : Fragment(R.layout.fragment_recyclerview_screen) {
         defenseCheckBox = view.findViewById<CheckBox>(R.id.defenseCheckbox)
         hpCheckBox = view.findViewById<CheckBox>(R.id.hpCheckbox)
 
+        recyclerView.layoutManager = GridLayoutManager(context, NUM_OF_COLUMNS)
         recyclerAdapter.setOnClickListener(object : PokemonAdapter.OnClickListener {
             override fun onClick(
-                position: Int,
-                item: PokemonItem
+                position: Int, item: PokemonItem
             ) {
                 viewModel.selectPokemon(item.id)
-                Log.d("INFO", "Selected pokemon ${item.id}")
-                parentFragmentManager.beginTransaction()
-                    .setCustomAnimations(
-                        android.R.animator.fade_in,
-                        android.R.animator.fade_out,
-                    )
-                    .add(R.id.fragment_container_view, PokemonFragment()).addToBackStack(
-                        PokemonFragment.POKEMON_FRAGMENT
-                    )
-                    .commit()
+                parentFragmentManager.beginTransaction().setCustomAnimations(
+                    android.R.animator.fade_in,
+                    android.R.animator.fade_out,
+                ).add(R.id.fragment_container_view, PokemonFragment()).addToBackStack(
+                    PokemonFragment.POKEMON_FRAGMENT
+                ).commit()
             }
 
         })
-        recyclerView.layoutManager = GridLayoutManager(context, 3)
         recyclerView.adapter = recyclerAdapter
-        viewModel.initFlow()
-        Log.d("INFO", "${viewModel.flow}")
-        observeFlow()
-        Log.d("INFO", "${viewModel.flow}")
+        viewModel.initPagerFlow()
+        observeViewModelFlow()
         topAppBar.setNavigationOnClickListener {
-            viewModel.resetSelectedPokemon()
             resetCheckboxes()
             currentFlowJob.cancel()
-            viewModel.initFlow(Random.nextInt(0, 1302))
-            observeFlow()
+            viewModel.resetSelectedPokemon()
+            viewModel.initPagerFlow(Random.nextInt(0, NUM_OF_POKEMON))
+            observeViewModelFlow()
         }
-        attackCheckBox.setOnCheckedChangeListener { buttonView, isChecked ->
+        attackCheckBox.setOnCheckedChangeListener { _, _ ->
             sortClicked()
         }
-        defenseCheckBox.setOnCheckedChangeListener { buttonView, isChecked ->
+        defenseCheckBox.setOnCheckedChangeListener { _, _ ->
             sortClicked()
         }
-        hpCheckBox.setOnCheckedChangeListener { buttonView, isChecked ->
+        hpCheckBox.setOnCheckedChangeListener { _, _ ->
             sortClicked()
         }
     }
 
-    private fun observeFlow(){
+    private fun observeViewModelFlow() {
         currentFlowJob = lifecycleScope.launch {
             viewModel.flow.collectLatest { pagingData ->
                 recyclerAdapter.submitData(pagingData)
@@ -97,24 +88,16 @@ class MainScreenFragment : Fragment(R.layout.fragment_recyclerview_screen) {
         }
     }
 
-//    private fun setupStateFlow(){
-//        lifecycleScope.launch {
-//            recyclerAdapter.loadStateFlow.collectLatest { loadStates ->
-//                val refreshLoadState: LoadState = loadStates.refresh
-//                if(refreshLoadState is LoadState.Loading){
-//                    viewModel.values.clear()
-//                }
-//            }
-//        }
-//    }
-
-    private fun sortClicked(){
+    private fun sortClicked() {
         currentFlowJob.cancel()
-        if(!attackCheckBox.isChecked && !hpCheckBox.isChecked && !defenseCheckBox.isChecked){
+        if (!attackCheckBox.isChecked && !hpCheckBox.isChecked && !defenseCheckBox.isChecked) {
             viewModel.resetSelectedPokemon()
-            observeFlow()
-        } else{
-            viewModel.sortPokemon(attackCheckBox.isChecked, hpCheckBox.isChecked, defenseCheckBox.isChecked).observe(viewLifecycleOwner) { pokemon ->
+            viewModel.initPagerFlow(Random.nextInt(0, NUM_OF_POKEMON))
+            observeViewModelFlow()
+        } else {
+            viewModel.sortPokemon(
+                attackCheckBox.isChecked, hpCheckBox.isChecked, defenseCheckBox.isChecked
+            ).observe(viewLifecycleOwner) { pokemon ->
                 currentFlowJob = lifecycleScope.launch {
                     recyclerAdapter.submitData(PagingData.from(pokemon))
                     recyclerView.scrollToPosition(0)
@@ -123,19 +106,15 @@ class MainScreenFragment : Fragment(R.layout.fragment_recyclerview_screen) {
         }
     }
 
-    private fun resetCheckboxes(){
-        if(attackCheckBox.isChecked){
-            attackCheckBox.isChecked = false
-        }
-        if(defenseCheckBox.isChecked){
-            defenseCheckBox.isChecked = false
-        }
-        if(hpCheckBox.isChecked){
-            hpCheckBox.isChecked = false
-        }
+    private fun resetCheckboxes() {
+        attackCheckBox.isChecked = false
+        defenseCheckBox.isChecked = false
+        hpCheckBox.isChecked = false
     }
+
     companion object {
-        const val MAIN_SCREEN_FRAGMENT = "MainScreenFragment"
+        const val NUM_OF_COLUMNS = 3
+        const val NUM_OF_POKEMON = 1302
     }
 
 }

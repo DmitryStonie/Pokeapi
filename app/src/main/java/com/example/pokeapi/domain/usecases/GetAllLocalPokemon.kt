@@ -6,10 +6,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-class GetLocalPokemon @Inject constructor(val repository: PokeApiLocalRepository) {
-    suspend fun invoke(id: Int): Pokemon? {
+
+class GetAllLocalPokemon @Inject constructor(val repository: PokeApiLocalRepository) {
+    suspend fun invoke(): List<Pokemon> {
         return withContext(Dispatchers.IO) {
-            repository.getPokemon(id)
+            repository.getAllPokemon()
         }
     }
 }

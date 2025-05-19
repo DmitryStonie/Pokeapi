@@ -4,9 +4,6 @@ import android.content.Context
 import androidx.room.Room
 import com.example.pokeapi.data.datasources.pokeapilocal.PokemonDao
 import com.example.pokeapi.data.datasources.pokeapilocal.PokemonDatabase
-import com.example.pokeapi.data.repositories.PokeApiRemoteRepositoryImpl
-import com.example.pokeapi.domain.repositories.PokeApiRemoteRepository
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,7 +21,10 @@ class RoomModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(@Named("DATABASE_NAME") databaseName: String, @ApplicationContext context: Context): PokemonDatabase =
+    fun provideDatabase(
+        @Named("DATABASE_NAME") databaseName: String,
+        @ApplicationContext context: Context
+    ): PokemonDatabase =
         Room.databaseBuilder(
             context,
             PokemonDatabase::class.java,

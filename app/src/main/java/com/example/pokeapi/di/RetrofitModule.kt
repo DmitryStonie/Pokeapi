@@ -17,21 +17,21 @@ object AppModule {
 
     @Provides
     @Named("API_BASE_URL")
-    fun providesBaseUrl() : String = "https://pokeapi.co/api/v2/"
+    fun providesBaseUrl(): String = "https://pokeapi.co/api/v2/"
 
     @Provides
     @Singleton
-    fun provideRetrofit(@Named("API_BASE_URL") BASE_URL : String) : Retrofit = Retrofit.Builder()
-        .addConverterFactory(GsonConverterFactory.create())
-        .baseUrl(BASE_URL)
-        .build()
+    fun provideRetrofit(@Named("API_BASE_URL") baseUrl: String): Retrofit =
+        Retrofit.Builder().addConverterFactory(GsonConverterFactory.create()).baseUrl(baseUrl)
+            .build()
 
     @Provides
     @Singleton
-    fun providePokeApiService(retrofit : Retrofit) : PokeApiService = retrofit.create(PokeApiService::class.java)
+    fun providePokeApiService(retrofit: Retrofit): PokeApiService =
+        retrofit.create(PokeApiService::class.java)
 
     @Provides
     @Singleton
-    fun providePokeApiDatasource(pokeApiService : PokeApiService) : PokeApiDatasource =
+    fun providePokeApiDatasource(pokeApiService: PokeApiService): PokeApiDatasource =
         PokeApiDatasource(pokeApiService)
 }

@@ -1,18 +1,17 @@
 package com.example.pokeapi.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import com.example.pokeapi.R
 import com.example.pokeapi.presentation.MainViewModel
+import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 
-class PokemonFragment: Fragment(R.layout.fragment_pokemon_info) {
+class PokemonFragment : Fragment(R.layout.fragment_pokemon_info) {
 
     val viewModel: MainViewModel by activityViewModels<MainViewModel>()
 
@@ -42,21 +41,28 @@ class PokemonFragment: Fragment(R.layout.fragment_pokemon_info) {
         defenseView = view.findViewById<TextView>(R.id.defense)
         speedView = view.findViewById<TextView>(R.id.speed)
         viewModel.selectedPokemon.observe(viewLifecycleOwner) { pokemon ->
-            if(pokemon != null){
-                Picasso.get().load(pokemon.sprite).resize(600, 600).into(imageView)
+            if (pokemon != null) {
+                Picasso.get().load(pokemon.spriteUrl).memoryPolicy(MemoryPolicy.NO_CACHE).resize(600, 600).into(imageView)
                 nameView.text = pokemon.name
                 hpView.text = pokemon.hp.toString()
                 heightView.text = pokemon.height.toString()
                 weightView.text = pokemon.weight.toString()
                 typesView.text = pokemon.types.joinToString(", ", "")
-                attackView.text = "${pokemon.attack}/${pokemon.specialAttack}"
-                defenseView.text = "${pokemon.defense}/${pokemon.specialDefense}"
+                attackView.text = String.format(
+                    resources.getString(R.string.stat_string), pokemon.attack, pokemon.specialAttack
+                )
+                defenseView.text = String.format(
+                    resources.getString(R.string.stat_string),
+                    pokemon.defense,
+                    pokemon.specialDefense
+                )
                 speedView.text = pokemon.speed.toString()
 
             }
         }
     }
-    companion object{
-        const val POKEMON_FRAGMENT="PokemonFragment"
+
+    companion object {
+        const val POKEMON_FRAGMENT = "PokemonFragment"
     }
 }
